@@ -5,10 +5,19 @@
 
 <mapper namespace="Board">
     <insert id="write" parameterType="board">
-        insert into boards_table(boardId, boardTitle, boardName, boardContents)
-        values(#{boardId}, #{boardTitle}, #{boardName}, #{boardContents})
+        insert into board_table(boardTitle, boardWriter, boardPassword, boardContents)
+        values(#{boardTitle}, #{boardWriter}, #{boardPassword}, #{boardContents})
     </insert>
-    <select id="findAll" parameterType="board">
-        select * from boards_table;
+    <select id="findAll" resultType="board">
+        select * from board_table;
     </select>
+    <select id="findById" parameterType="long" resultType="board">
+        select id, boardTitle, boardWriter, boardContents, boardHits, boardCreatedDate from board_table where id=#{id}
+    </select>
+    <update id="updateHits" parameterType="long">
+        update board_table set boardHits = boardHits+1 where id = #{id}
+    </update>
+
+
+
 </mapper>

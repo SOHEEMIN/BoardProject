@@ -12,16 +12,20 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
-    public boolean write(BoardDTO boardDTO) {
-        int writeResult = boardRepository.write(boardDTO);
-        if (writeResult > 0) {
+    public boolean save(BoardDTO boardDTO) {
+        int saveResult = boardRepository.save(boardDTO);
+        if (saveResult > 0) {
             return true;
         } else {
             return false;
         }
     }
 
-    public List<BoardDTO> findAll() {
-        return boardRepository.findAll();
+    public List<BoardDTO> findAll(long id) {
+        return boardRepository.findAll(id);
+    }
+
+    public BoardDTO findById(long id) {
+        return boardRepository.findById(id);
     }
 }
