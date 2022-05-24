@@ -4,6 +4,7 @@ import com.its.board.DTO.BoardDTO;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,4 +28,18 @@ public class BoardRepository {
         sql.update("Board.updateHits", id);
         return sql.selectOne("Board.findById", id);
     }
+
+    public void delete(Long id) {
+        sql.delete("Board.delete", id);
+    }
+
+    public void update(BoardDTO boardDTO) {
+        sql.update("Board.update", boardDTO);
+    }
+
+    public void saveFile(BoardDTO boardDTO) {
+        sql.insert("Board.saveFile", boardDTO);
+    }
+
 }
+

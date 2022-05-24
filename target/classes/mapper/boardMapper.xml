@@ -12,12 +12,21 @@
         select * from board_table;
     </select>
     <select id="findById" parameterType="long" resultType="board">
-        select id, boardTitle, boardWriter, boardContents, boardHits, boardCreatedDate from board_table where id=#{id}
+        select * from board_table where id=#{id}
     </select>
     <update id="updateHits" parameterType="long">
         update board_table set boardHits = boardHits+1 where id = #{id}
     </update>
-
+    <delete id="delete" parameterType="Long">
+        delete from board_table where id=#{id}
+    </delete>
+    <update id="update" parameterType="board">
+        update board_table set boardTitle =#{boardTitle},boardContents=#{boardContents} where id=#{id}
+    </update>
+    <insert id="saveFile" parameterType="board">
+        insert into board_table(boardTitle, boardWriter, boardPassword, boardContents, boardFileName)
+        values(#{boardTitle}, #{boardWriter}, #{boardPassword}, #{boardContents}, #{boardFileName})
+    </insert>
 
 
 </mapper>
