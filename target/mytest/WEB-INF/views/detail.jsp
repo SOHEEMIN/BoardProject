@@ -24,13 +24,18 @@
 글제목: ${board.boardTitle}<br>
 글내용: ${board.boardContents}<br>
 <img src="${pageContext.request.contextPath}/upload/${board.boardFileName}" alt="" height="100" width="100">
-<button class="btn btn-primary" onclick="boardUpdate()">글 수정</button> &nbsp;&nbsp;
-<button class="btn btn-primary" onclick="boardDelete()">글 삭제</button> &nbsp;&nbsp;
-<button class="btn btn-primary" onclick="findAll()">글 목록</button> &nbsp;&nbsp;
+        <button class="btn btn-primary" onclick="boardUpdate()">글 수정</button> &nbsp;&nbsp;
+        <button class="btn btn-primary" onclick="boardDelete()">글 삭제</button> &nbsp;&nbsp;
+        <button class="btn btn-primary" onclick="findAll()">글 목록</button> &nbsp;
+        <button class="btn btn-primary" onclick="paging()">페이징목록</button> &nbsp;
+
     </div>
 </div>
 </body>
 <script>
+    const paging = () => {
+      location.href="/board/paging?page=${page}"; //직전에 있었던 페이지 값을 컨트롤러로 요청
+    }
     const boardUpdate = () => {
         location.href = "/board/update?id=${board.id}"
     }
