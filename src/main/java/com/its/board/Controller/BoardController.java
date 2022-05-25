@@ -1,14 +1,15 @@
 package com.its.board.Controller;
 
 import com.its.board.DTO.BoardDTO;
+import com.its.board.DTO.CommentDTO;
 import com.its.board.DTO.PageDTO;
 import com.its.board.Service.BoardService;
+import com.its.board.Service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import java.util.List;
 public class BoardController {
     @Autowired
     private BoardService boardService;
+    @Autowired
+    private CommentService commentService;
 
     //글쓰기 처리
     @PostMapping("/save")
@@ -37,7 +40,7 @@ public class BoardController {
         long id = 0;
         List<BoardDTO> boardDTOList = boardService.findAll(id);
         model.addAttribute("boardList", boardDTOList);
-        return "/boardPages/list";
+        return "boardPages/list";
     }
 
     @GetMapping("/detail")
@@ -47,7 +50,10 @@ public class BoardController {
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("board", boardDTO);
         model.addAttribute("page", page);
-        return "/detail";
+        //댓글 목록도 가져가야 함.
+        List<CommentDTO> commentDTOList = commentService.findAll(id);
+        model.addAttribute("commentList", commentDTOList);
+        return "boardPages/detail";
     }
 
     // 비밀번호 체크 페이지
@@ -96,5 +102,13 @@ public class BoardController {
         model.addAttribute("boardList", boardList);
         model.addAttribute("paging", paging);
         return "boardPages/pagingList";
+    }
+
+    //검색처리
+    @GetMapping("/search")
+    public String search(@RequestParam("searchType") String searchType,@RequestParam ("q") String q, Model model){
+        List<BoardDTO> searchList = boardService.search(searchType,q);
+        model.addAttribute("boardList", searchList);
+        return "boardPages/list";
     }
 }

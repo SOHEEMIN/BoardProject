@@ -94,4 +94,12 @@ public class BoardService {
         paging.setMaxPage(maxPage);
         return paging;
     }
+    public List<BoardDTO> search(String searchType, String q) {
+        Map<String, String> searchParam = new HashMap<>();
+        searchParam.put("type", searchType);
+        searchParam.put("q", q);
+        List<BoardDTO> searchList = boardRepository.search(searchParam);
+        return searchList;
+        //사용자가 입력한 것을 맵에 담에서 그 맵을 레파지토리로 보낸다
+    }
 }
