@@ -1,6 +1,7 @@
 package com.its.board.Controller;
 
 import com.its.board.DTO.BoardDTO;
+import com.its.board.DTO.PageDTO;
 import com.its.board.Service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,10 +41,12 @@ public class BoardController {
     }
 
     @GetMapping("/detail")
-    public String findById(@RequestParam("id") long id, Model model) {
+    public String findById(@RequestParam("id") long id, Model model,
+                            @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
         System.out.println("id = " + id + ", model = " + model);
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("board", boardDTO);
+        model.addAttribute("page", page);
         return "/detail";
     }
 
@@ -85,5 +88,13 @@ public class BoardController {
     public String saveFile(@ModelAttribute BoardDTO boardDTO) throws IOException {
         boardService.saveFile(boardDTO);
         return "redirect:/board/findAll";
+    }
+    @GetMapping("/paging")
+    public String paging(@RequestParam(value="page", required=false, defaultValue="1") int page, Model model) {
+        List<BoardDTO> boardList = boardService.pagingList(page);
+        PageDTO paging = boardService.paging(page);
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("paging", paging);
+        return "boardPages/pagingList";
     }
 }
