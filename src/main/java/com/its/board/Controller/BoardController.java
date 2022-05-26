@@ -47,8 +47,8 @@ public class BoardController {
     public String findById(@RequestParam("id") long id, Model model,
                             @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
         System.out.println("id = " + id + ", model = " + model);
-        BoardDTO boardDTO = boardService.findById(id);
-        model.addAttribute("board", boardDTO);
+//        BoardDTO boardDTO = boardService.findById(id); 아래처럼도 사용 가능
+        model.addAttribute("board",  boardService.findById(id));
         model.addAttribute("page", page);
         //댓글 목록도 가져가야 함.
         List<CommentDTO> commentDTOList = commentService.findAll(id);
@@ -59,8 +59,8 @@ public class BoardController {
     // 비밀번호 체크 페이지
     @GetMapping("/passwordCheck")
     public String passwordCheck(@RequestParam("id") long id, Model model) {
-        BoardDTO boardDTO = boardService.findById(id);
-        model.addAttribute("board", boardDTO);
+//        BoardDTO boardDTO = boardService.findById(id); 아래처럼도 가능
+        model.addAttribute("board", boardService.findById(id));
         return "boardPages/passwordCheck";
     }
 
@@ -96,9 +96,14 @@ public class BoardController {
         return "redirect:/board/findAll";
     }
     @GetMapping("/paging")
+    // /board/paging?page=1
+    // required=false 하면 /board/paging 요청도 가능하다.
+    // 별도의 페이지 값을 요청하지 않으면 페이지(page=1)를 보여주자.
     public String paging(@RequestParam(value="page", required=false, defaultValue="1") int page, Model model) {
         List<BoardDTO> boardList = boardService.pagingList(page);
+        // ↑해당 페이지에 보여져야하는 글 리스트
         PageDTO paging = boardService.paging(page);
+        // ↑페이지 하단에 보여져야하는 글 번호
         model.addAttribute("boardList", boardList);
         model.addAttribute("paging", paging);
         return "boardPages/pagingList";
